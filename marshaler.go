@@ -1,6 +1,7 @@
 package tigertonic
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -229,9 +230,18 @@ func (m *Marshaler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					log.Println(err)
 				}
 			}
-		} else if err := json.NewEncoder(w).Encode(rs); nil != err {
-			log.Println(err)
+		} else {
+			var buf bytes.Buffer
+
+			if err := json.NewEncoder(&buf).Encode(rs); nil != err {
+				log.Println(err)
+			} else {
+				if _, err := io.Copy(w, &buf); nil != err {
+					log.Println(err)
+				}
+			}
 		}
+
 	}
 }
 
