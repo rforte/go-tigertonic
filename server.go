@@ -31,8 +31,8 @@ func NewServer(addr string, handler http.Handler) *Server {
 				Handler: handler,
 			},
 			MaxHeaderBytes: 4096,
-			ReadTimeout:    60e9, // These are absolute times which must be
-			WriteTimeout:   60e9, // longer than the longest {up,down}load.
+			ReadTimeout:    300 * time.Second, // These are absolute times which must be
+			WriteTimeout:   300 * time.Second, // longer than the longest {up,down}load.
 		},
 		ch:    ch,
 		conns: make(map[string]net.Conn),
